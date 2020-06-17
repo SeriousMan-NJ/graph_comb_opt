@@ -7,7 +7,7 @@ import sys
 class MvcLib(object):
 
     def __init__(self, args):
-        dir_path = os.path.dirname(os.path.realpath(__file__))        
+        dir_path = os.path.dirname(os.path.realpath(__file__))
         self.lib = ctypes.CDLL('%s/build/dll/libmvc.so' % dir_path)
 
         self.lib.Fit.restype = ctypes.c_double
@@ -25,11 +25,11 @@ class MvcLib(object):
         e_list_to = (ctypes.c_int * len(edges))()
 
         if len(edges):
-            a, b = zip(*edges)        
-            e_list_from[:] = a
-            e_list_to[:] = b
+            a, b = zip(*edges)
+            e_list_from[:] = map(lambda x: int(x), a)
+            e_list_to[:] = map(lambda x: int(x), b)
 
-        return (len(g.nodes()), len(edges), ctypes.cast(e_list_from, ctypes.c_void_p), ctypes.cast(e_list_to, ctypes.c_void_p)) 
+        return (len(g.nodes()), len(edges), ctypes.cast(e_list_from, ctypes.c_void_p), ctypes.cast(e_list_to, ctypes.c_void_p))
 
     def TakeSnapshot(self):
         self.lib.UpdateSnapshot()
@@ -48,7 +48,7 @@ class MvcLib(object):
             self.ngraph_train += 1
 
         self.lib.InsertGraph(is_test, t, n_nodes, n_edges, e_froms, e_tos)
-    
+
     def LoadModel(self, path_to_model):
         p = ctypes.cast(path_to_model, ctypes.c_char_p)
         self.lib.LoadModel(p)

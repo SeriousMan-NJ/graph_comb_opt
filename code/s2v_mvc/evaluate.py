@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 sys.path.append( '%s/mvc_lib' % os.path.dirname(os.path.realpath(__file__)) )
 from mvc_lib import MvcLib
-    
+
 def find_model_file(opt):
     max_n = int(opt['max_n'])
     min_n = int(opt['min_n'])
@@ -30,10 +30,10 @@ def find_model_file(opt):
     assert best_it >= 0
     print 'using iter=', best_it, 'with r=', best_r
     return '%s/nrange_%d_%d_iter_%d.model' % (opt['save_dir'], min_n, max_n, best_it)
-    
+
 if __name__ == '__main__':
     api = MvcLib(sys.argv)
-    
+
     opt = {}
     for i in range(1, len(sys.argv), 2):
         opt[sys.argv[i][1:]] = sys.argv[i + 1]
@@ -44,7 +44,7 @@ if __name__ == '__main__':
     sys.stdout.flush()
     api.LoadModel(model_file)
 
-    n_test = 1000
+    n_test = 1
     f = open(opt['data_test'], 'rb')
     frac = 0.0
 

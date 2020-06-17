@@ -32,20 +32,20 @@ if __name__ == '__main__':
             m = int(sys.argv[i + 1])
         if sys.argv[i] == '-connected':
             isConnected = int(sys.argv[i + 1])
-         
+
     assert save_dir is not None
     assert max_n is not None
     assert min_n is not None
     assert num_graph is not None
     assert p is not None
     assert graph_type is not None
-    
+
     seed = 1
     np.random.seed(seed=seed)
-    
+
     if m is None:
         m = 0
-    
+
     print("Final Output: %s/gtype-%s-nrange-%d-%d-n_graph-%d-p-%.2f-m-%d.pkl" % (save_dir, graph_type, min_n, max_n, num_graph, p, m))
     print("Generating graphs...")
     g_list = []
@@ -61,7 +61,7 @@ if __name__ == '__main__':
             g = nx.powerlaw_cluster_graph(n = cur_n, m = m, p = p, seed = seed + i)
         elif graph_type == 'barabasi_albert':
             g = nx.barabasi_albert_graph(n = cur_n, m = m, seed = seed + i)
-        
+
         if isConnected:
             # get largest connected component
             g_idx = max(nx.connected_components(g), key=len)
@@ -70,14 +70,14 @@ if __name__ == '__main__':
             if nx.number_of_nodes(gcc) < min_n:
                 print("here")
                 continue
-            
+
             max_idx = max(gcc.nodes())
             if max_idx != nx.number_of_nodes(gcc) - 1:
                 idx_map = {}
                 for idx in gcc.nodes():
                     t = len(idx_map)
                     idx_map[idx] = t
-                
+
                 g = nx.Graph()
                 g.add_nodes_from(range(0, nx.number_of_nodes(gcc)))
                 for edge in gcc.edges():
@@ -85,22 +85,22 @@ if __name__ == '__main__':
                 gcc = g
             max_idx = max(gcc.nodes())
             assert max_idx == nx.number_of_nodes(gcc) - 1
-            
+
             # check number of nodes in induced subgraph
             numnodes = (len(list(nx.bfs_tree(gcc,gcc.nodes()[0]))))
             if numnodes < min_n or numnodes > max_n:
                 print("invalid graph generated!")
                 print(numnodes)
                 sys.exit()
-            
+
             g = gcc
-            
+
         # g_list.append(g)
         with open('%s/gtype-%s-nrange-%d-%d-n_graph-%d-p-%.2f-m-%d.pkl' % (save_dir, graph_type, min_n, max_n, num_graph, p, m), 'ab') as fout:
             cp.dump(g, fout, cp.HIGHEST_PROTOCOL)
         numgenerated += 1
-        
-        
+
+
     # print(len(g_list))
     # d = {}
     # d['g_list'] = g_list
