@@ -33,8 +33,7 @@ GSet::GSet()
 
 void GSet::InsertGraph(int gid, std::shared_ptr<Graph> graph)
 {
-    assert(graph_pool.count(gid) == 0);
-
+    // assert(graph_pool.count(gid) == 0);
     graph_pool[gid] = graph;
 }
 

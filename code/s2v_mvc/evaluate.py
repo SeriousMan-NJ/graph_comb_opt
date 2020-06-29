@@ -6,6 +6,7 @@ import ctypes
 import os
 import sys
 import time
+import re
 from tqdm import tqdm
 
 sys.path.append( '%s/mvc_lib' % os.path.dirname(os.path.realpath(__file__)) )
@@ -44,26 +45,38 @@ if __name__ == '__main__':
     sys.stdout.flush()
     api.LoadModel(model_file)
 
-    n_test = 1
-    f = open(opt['data_test'], 'rb')
-    frac = 0.0
-
-    test_name = opt['data_test'].split('/')[-1]
-    result_file = '%s/test-%s-gnn-%s-%s.csv' % (opt['save_dir'], test_name, opt['min_n'], opt['max_n'])
-
-    with open(result_file, 'w') as f_out:
-        print 'testing'
-        sys.stdout.flush()
-        for i in tqdm(range(n_test)):
+    isec = int(opt['isec'])
+    for filename in os.listdir(opt['data_dir']):
+        if filename.endswith(".export.pp2graph.pkl"):
+            filepath = '%s/%s' % (opt['data_dir'], filename)
+            f = open(filepath, 'rb')
             g = cp.load(f)
-            api.InsertGraph(g, is_test=True)
-            t1 = time.time()
-            val, sol = api.GetSol(i, nx.number_of_nodes(g))
-            t2 = time.time()
-            f_out.write('%.8f,' % val)
-            f_out.write('%d' % sol[0])
-            for i in range(sol[0]):
-                f_out.write(' %d' % sol[i + 1])
-            f_out.write(',%.6f\n' % (t2 - t1))
-            frac += val
-    print 'average size of vc: ', frac / n_test
+            g_nodes = [int(n) for n in g.nodes]
+            for i in range(isec):
+                g = nx.convert_node_labels_to_integers(g)
+                frac = 0.0
+
+                filename = re.sub('\.pkl$', '', filename)
+                result_file = '%s/%s.clr.%d' % (opt['output_dir'], filename, i)
+
+                with open(result_file, 'w') as f_out:
+                    print 'testing'
+                    sys.stdout.flush()
+
+                    api.InsertGraph(g, is_test=True, gid=i)
+                    t1 = time.time()
+                    val, sol = api.GetSol(i, nx.number_of_nodes(g))
+                    t2 = time.time()
+
+                    mvc_nodes = set()
+                    for j in range(sol[0]):
+                        f_out.write('%d ' % g_nodes[sol[j + 1]])
+                        mvc_nodes.add(sol[j + 1])
+
+                    mis_nodes = set(g.nodes).difference(mvc_nodes)
+                    for n in sorted(list(mis_nodes), reverse=True):
+                        g_nodes.pop(n)
+                    g.remove_nodes_from(mis_nodes)
+
+                    frac += val
+                print 'average size of vc: ', frac

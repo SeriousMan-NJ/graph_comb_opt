@@ -3,7 +3,12 @@
 g_type=barabasi_albert
 
 # data_test=../../data/mvc/gtype-$g_type-nrange-15-20-n_graph-1000-p-0.00-m-4.pkl
-data_test=../../data/mvc/test2.pkl
+data_test=../../data/mvc/blackscholes.ll.bs_thread.export.pp2graph.pkl
+# data_dir=/home/ywshin/llvm-project/llvm/lib/CodeGen/PP2/test
+# output_dir=/home/ywshin/llvm-project/llvm/lib/CodeGen/PP2/test
+data_dir=$WORKING_DIR
+output_dir=$WORKING_DIR
+isec=3
 
 result_root=results/dqn-$g_type
 
@@ -48,6 +53,9 @@ python evaluate.py \
     -n_step $n_step \
     -dev_id $dev_id \
     -data_test $data_test \
+    -data_dir $data_dir \
+    -output_dir $output_dir \
+    -isec $isec \
     -min_n $min_n \
     -max_n $max_n \
     -num_env $num_env \
