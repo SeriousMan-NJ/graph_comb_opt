@@ -2,8 +2,8 @@
 
 min_n=15
 max_n=20
-gtype=barabasi_albert
-p=0.00
+gtype=erdos_renyi
+p=0.15
 m=4
 output_root=../../../data/mvc
 

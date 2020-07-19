@@ -49,11 +49,6 @@ class MvcLib(object):
 
         self.lib.InsertGraph(is_test, t, n_nodes, n_edges, e_froms, e_tos)
 
-    def InsertGraph(self, g, is_test, gid):
-        n_nodes, n_edges, e_froms, e_tos = self.__CtypeNetworkX(g)
-
-        self.lib.InsertGraph(is_test, gid, n_nodes, n_edges, e_froms, e_tos)
-
     def LoadModel(self, path_to_model):
         p = ctypes.cast(path_to_model, ctypes.c_char_p)
         self.lib.LoadModel(p)

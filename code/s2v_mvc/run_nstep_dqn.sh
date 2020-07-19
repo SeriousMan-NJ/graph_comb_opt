@@ -1,6 +1,7 @@
 #!/bin/bash
 
-g_type=barabasi_albert
+# g_type=barabasi_albert
+g_type=erdos_renyi
 
 result_root=results/dqn-$g_type
 
@@ -14,7 +15,7 @@ embed_dim=64
 dev_id=0
 
 # max batch size for training/testing
-batch_size=64
+batch_size=128
 
 net_type=QNet
 
@@ -28,7 +29,7 @@ learning_rate=0.0001
 w_scale=0.01
 
 # nstep
-n_step=2
+n_step=5
 
 min_n=15
 max_n=20
@@ -36,7 +37,7 @@ max_n=20
 num_env=1
 mem_size=500000
 
-max_iter=1000000
+max_iter=100000
 
 # folder to save the trained model
 save_dir=$result_root/embed-$embed_dim-nbp-$max_bp_iter-rh-$reg_hidden

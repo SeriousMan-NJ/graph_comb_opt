@@ -1,6 +1,6 @@
 #!/bin/bash
 
-g_type=barabasi_albert
+g_type=erdos_renyi
 
 # data_test=../../data/mvc/gtype-$g_type-nrange-15-20-n_graph-1000-p-0.00-m-4.pkl
 data_test=../../data/mvc/blackscholes.ll.bs_thread.export.pp2graph.pkl
@@ -8,7 +8,7 @@ data_test=../../data/mvc/blackscholes.ll.bs_thread.export.pp2graph.pkl
 # output_dir=/home/ywshin/llvm-project/llvm/lib/CodeGen/PP2/test
 data_dir=$WORKING_DIR
 output_dir=$WORKING_DIR
-isec=3
+isec=16
 
 result_root=results/dqn-$g_type
 
@@ -22,7 +22,7 @@ embed_dim=64
 dev_id=3
 
 # max batch size for training/testing
-batch_size=64
+batch_size=128
 
 net_type=QNet
 
